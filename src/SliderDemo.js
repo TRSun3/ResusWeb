@@ -34,11 +34,11 @@ export default class SliderDemo extends Component {
     var best_marker_points = new Array(Number);
     var most_points = -1;
     var best_color = new Array(Number);
-    var best_angle = new Array(Number);
+    // var best_angle = new Array(Number);
     await bag.readMessages({ topics: ['/ultrasound_reconstruction'] }, (result) => {
-      var points = new Array();
-      var colors = new Array();
-      var angles = new Array();
+      var points = [];
+      var colors = [];
+      var angles = [];
       console.log(result.message);
       for(var i = 0; i < result.message.markers.length; i++){
         var color = Math.random();
@@ -70,20 +70,18 @@ export default class SliderDemo extends Component {
     var a = [];
     var b = [];
     var c = [];
-    for(var i = 0; i < best_marker_points.length; i++){
-      if(i % 3 == 0){
+    for(i = 0; i < best_marker_points.length; i++){
+      if(i % 3 === 0){
         a.push(i);
-      }else if(i % 3 == 1){
+      }else if(i % 3 === 1){
         b.push(i);
       }else{
         c.push(i);
       }
     }
 
-    var tdfdf = [1, 2, 3]
     // var data = {x : x, y : y, z : z, i : a, j : b, k : c, 
     //  alphahull: 5, opacity: 1, intensity: best_color, color: 'cyan', type: 'mesh3d'};
-    var data = {x : x, y : y, z : z, type: 'scatter3d', mode: 'lines'};
     // @ts-ignore
     var graph= (<Plot data={[
       {

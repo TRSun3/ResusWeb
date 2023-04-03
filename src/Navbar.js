@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from "react";
-import { Menu, Header, InputOnChangeData } from "semantic-ui-react";
+import React from "react";
+import {Header} from "semantic-ui-react";
 
 export default class Navbar extends React.Component {
   state = { activeItem: "home" };
@@ -12,8 +12,6 @@ export default class Navbar extends React.Component {
   };
 
   render() {
-    const { activeItem } = this.state;
-
     return <Header as="h1">RESUS Demo</Header>;
   }
 }
