@@ -1,33 +1,56 @@
 {
-  "name": "create-react-app-lambda",
-  "version": "0.5.0",
+  "name": "resus-web",
+  "version": "0.1.0",
+  "homepage": "https://jyao6429.github.io/resus-web",
   "private": true,
   "dependencies": {
-    "axios": "^0.19.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^3.0.1"
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "jquery": "^3.6.3",
+    "plotly.js": "^2.20.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-error-overlay": "^6.0.11",
+    "react-iframe": "^1.8.5",
+    "react-player": "^2.11.2",
+    "react-plotly.js": "^2.6.0",
+    "react-scripts": "^5.0.1",
+    "rosbag": "^3.0.1",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.4",
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "start:lambda": "netlify-lambda serve src/lambda",
-    "build": "run-p build:**",
-    "build:app": "react-scripts build",
-    "build:lambda": "netlify-lambda build src/lambda",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
-    "netlify-lambda": "^1.4.5",
-    "npm-run-all": "^4.1.5"
+    "gh-pages": "^4.0.0"
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
   }
 }
