@@ -1,12 +1,8 @@
 {
   "name": "resus-web",
   "version": "0.1.0",
-  "homepage": "https://jyao6429.github.io/resus-web",
-  "private": true,
+  "private": false,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "jquery": "^3.6.3",
     "plotly.js": "^2.20.0",
     "react": "^18.2.0",
