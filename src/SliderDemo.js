@@ -51,7 +51,7 @@ export default class SliderDemo extends Component {
           best_marker_points = points;
 			    most_points = points.length;
           best_color = colors;
-          best_angle = angles;
+          // best_angle = angles;
         }
       }
     });
