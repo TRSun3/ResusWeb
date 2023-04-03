@@ -29,7 +29,7 @@ export default class SliderDemo extends Component {
 
 
   async draw(file){
-    console.log("function called");
+    // console.log("function called");
     const bag = await open(file);
     var best_marker_points = new Array(Number);
     var most_points = -1;
@@ -39,7 +39,7 @@ export default class SliderDemo extends Component {
       var points = [];
       var colors = [];
       var angles = [];
-      console.log(result.message);
+      // console.log(result.message);
       for(var i = 0; i < result.message.markers.length; i++){
         var color = Math.random();
         for(var j = 0; j < result.message.markers[i].points.length; j++){
@@ -56,8 +56,8 @@ export default class SliderDemo extends Component {
       }
     });
 
-    console.log(best_marker_points.length);
-    console.log(best_marker_points.length % 3);
+    // console.log(best_marker_points.length);
+    // console.log(best_marker_points.length % 3);
     var x = [];
     var y = [];
     var z = [];
