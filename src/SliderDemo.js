@@ -8,7 +8,6 @@ const pigs = [
   "2020-10-13--21-09-50_vol1",
   "2020-10-13--21-09-50_vol2",
   "2020-10-20--21-13-12_stacked",
-  "2020-10-20--21-38-53_stacked",
   "2021-03-18--20-28-33_stacked",
   "2021-05-04--20-56-25_vol2",
   "phantom-5-2",
@@ -119,7 +118,7 @@ export default class SliderDemo extends Component {
 
   render() {
     const { pig, index } = this.state;
-    if(pig.localeCompare(pigs[14]) !== 0){
+    if(pig.localeCompare(pigs[13]) !== 0){
       const pig_path = `${process.env.PUBLIC_URL}/data/newImages/${pig}`;
       const perf1 = `${pig_path}/gt.html`;
       const perf2 = `${pig_path}/pred_aug.html`;
@@ -139,15 +138,12 @@ export default class SliderDemo extends Component {
         maxIndex = 69;
         hasGT = true;
       }else if(pig.localeCompare(pigs[4]) == 0){
-        maxIndex = 41;
-        hasGT = true;
-      }else if(pig.localeCompare(pigs[5]) == 0){
         maxIndex = 85;
         hasGT = true;
-      }else if(pig.localeCompare(pigs[6]) == 0){
+      }else if(pig.localeCompare(pigs[5]) == 0){
         maxIndex = 55;
         hasGT = true;
-      }else if(pig.localeCompare(pigs[7]) == 0){
+      }else if(pig.localeCompare(pigs[6]) == 0){
         maxIndex = 73;
         hasGT = true;
       }else{
