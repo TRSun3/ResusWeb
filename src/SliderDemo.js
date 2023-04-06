@@ -167,11 +167,11 @@ export default class SliderDemo extends Component {
                 />
               </div>
               <div id="flex_container">
-                <div>
+                <div class="flex_child">
                   <h3>Ground Truth</h3>
                   <iframe title='title1' src={perf1} width='500px' height='500px' loading="lazy"></iframe>
                 </div>
-                <div>
+                <div class="flex_child">
                   <h3>Pred Aug</h3>
                   <iframe title='title2' src={perf2} width='500px' height='500px' loading="lazy"></iframe>
                 </div>
