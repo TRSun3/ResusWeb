@@ -4,6 +4,14 @@ import {open} from 'rosbag';
 import Plot from 'react-plotly.js';
 import ReactDOM from "react-dom/client";
 const pigs = [
+  "2020-09-24--21-21-07_stacked",
+  "2020-10-13--21-09-50_vol1",
+  "2020-10-13--21-09-50_vol2",
+  "2020-10-20--21-13-12_stacked",
+  "2020-10-20--21-38-53_stacked",
+  "2021-03-18--20-28-33_stacked",
+  "2021-05-04--20-56-25_vol2",
+  "phantom-5-2",
   "2022-09-20--20-24-20",
   "2022-10-06--20-13-38",
   "2022-11-10--21-20-31",
@@ -111,20 +119,82 @@ export default class SliderDemo extends Component {
 
   render() {
     const { pig, index } = this.state;
-    if(pig.localeCompare(pigs[6]) !== 0){
+    if(pig.localeCompare(pigs[14]) !== 0){
       const pig_path = `${process.env.PUBLIC_URL}/data/newImages/${pig}`;
-      const perf = `${pig_path}/experiment.html`;
+      const perf1 = `${pig_path}/gt.html`;
+      const perf2 = `${pig_path}/pred_aug.html`;
+      const perf3 = `${pig_path}/experiment.html`;
+      var maxIndex = 0;
+      var hasGT = false;
+      if(pig.localeCompare(pigs[0]) == 0){
+        maxIndex = 84;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[1]) == 0){
+        maxIndex = 37;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[2]) == 0){
+        maxIndex = 53;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[3]) == 0){
+        maxIndex = 69;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[4]) == 0){
+        maxIndex = 41;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[5]) == 0){
+        maxIndex = 85;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[6]) == 0){
+        maxIndex = 57;
+        hasGT = true;
+      }else if(pig.localeCompare(pigs[7]) == 0){
+        maxIndex = 73;
+        hasGT = true;
+      }else{
+        maxIndex = 50;
+      }
+      if(hasGT){
+        return (
+          <Grid centered columns={3}>
+            <Grid.Column textAlign="center">
+              <iframe title='title1' src={perf1} width='500px' height='500px' loading="lazy"></iframe>
+            </Grid.Column>
+            <Grid.Column textAlign="center" as={Form}>
+              <Image src={`${pig_path}/frames/${index}.png`} centered/>
+              <p>Sliced ultrasound image from reconstructed volume</p>
+              <Form.Input
+                min={1}
+                max={maxIndex}
+                name="index"
+                onChange={this.handleChange}
+                step={1}
+                type="range"
+                value={index}
+              />
+              <Form.Dropdown
+                label="Select a pig ultrasound reconstruction:"
+                name="pig"
+                onChange={this.handleChange}
+                options={options}
+                value={pig}
+              />
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <iframe title='title2' src={perf2} width='500px' height='500px' loading="lazy"></iframe>
+            </Grid.Column>
+          </Grid>
+        );
+      }
       return (
         <Grid centered columns={3}>
           <Grid.Column textAlign="center">
-          <Image src={`${pig_path}/frames/${index}.png`} centered/>
-            <p>Sliced ultrasound image from reconstructed volume</p>
           </Grid.Column>
           <Grid.Column textAlign="center" as={Form}>
-            <iframe title='mytitle' src={perf} width='500px' height='500px' loading="lazy"></iframe>
+            <Image src={`${pig_path}/frames/${index}.png`} centered/>
+            <p>Sliced ultrasound image from reconstructed volume</p>
             <Form.Input
               min={1}
-              max={200}
+              max={maxIndex}
               name="index"
               onChange={this.handleChange}
               step={1}
@@ -140,8 +210,7 @@ export default class SliderDemo extends Component {
             />
           </Grid.Column>
           <Grid.Column textAlign="center">
-            <Image src={`${pig_path}/labels/${index}.png`} centered />
-            <p>Sliced label from reconstructed volume</p>
+            <iframe title='title2' src={perf3} width='500px' height='500px' loading="lazy"></iframe>
           </Grid.Column>
         </Grid>
       );
