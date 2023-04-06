@@ -130,10 +130,10 @@ export default class SliderDemo extends Component {
         maxIndex = 84;
         hasGT = true;
       }else if(pig.localeCompare(pigs[1]) == 0){
-        maxIndex = 37;
+        maxIndex = 68;
         hasGT = true;
       }else if(pig.localeCompare(pigs[2]) == 0){
-        maxIndex = 53;
+        maxIndex = 68;
         hasGT = true;
       }else if(pig.localeCompare(pigs[3]) == 0){
         maxIndex = 69;
@@ -145,7 +145,7 @@ export default class SliderDemo extends Component {
         maxIndex = 85;
         hasGT = true;
       }else if(pig.localeCompare(pigs[6]) == 0){
-        maxIndex = 57;
+        maxIndex = 55;
         hasGT = true;
       }else if(pig.localeCompare(pigs[7]) == 0){
         maxIndex = 73;
@@ -157,6 +157,7 @@ export default class SliderDemo extends Component {
         return (
           <Grid centered columns={3}>
             <Grid.Column textAlign="center">
+              <h3>Ground Truth</h3>
               <iframe title='title1' src={perf1} width='500px' height='500px' loading="lazy"></iframe>
             </Grid.Column>
             <Grid.Column textAlign="center" as={Form}>
@@ -171,6 +172,12 @@ export default class SliderDemo extends Component {
                 type="range"
                 value={index}
               />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
               <Form.Dropdown
                 label="Select a pig ultrasound reconstruction:"
                 name="pig"
@@ -180,6 +187,7 @@ export default class SliderDemo extends Component {
               />
             </Grid.Column>
             <Grid.Column textAlign="center">
+              <h3>Pred Aug</h3>
               <iframe title='title2' src={perf2} width='500px' height='500px' loading="lazy"></iframe>
             </Grid.Column>
           </Grid>
@@ -201,6 +209,12 @@ export default class SliderDemo extends Component {
               type="range"
               value={index}
             />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
             <Form.Dropdown
               label="Select a pig ultrasound reconstruction:"
               name="pig"
@@ -210,6 +224,7 @@ export default class SliderDemo extends Component {
             />
           </Grid.Column>
           <Grid.Column textAlign="center">
+            <h3>Pred Aug</h3>
             <iframe title='title2' src={perf3} width='500px' height='500px' loading="lazy"></iframe>
           </Grid.Column>
         </Grid>
