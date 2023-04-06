@@ -151,41 +151,39 @@ export default class SliderDemo extends Component {
       }
       if(hasGT){
         return (
-          <Grid centered columns={3}>
-            <Grid.Column textAlign="center">
-              <h3>Ground Truth</h3>
-              <iframe title='title1' src={perf1} width='500px' height='500px' loading="lazy"></iframe>
-            </Grid.Column>
+          <Grid centered columns={1}>
             <Grid.Column textAlign="center" as={Form}>
               <Image src={`${pig_path}/frames/${index}.png`} centered/>
               <p>Sliced ultrasound image from reconstructed volume</p>
-              <Form.Input
-                min={1}
-                max={maxIndex}
-                name="index"
-                onChange={this.handleChange}
-                step={1}
-                type="range"
-                value={index}
-              />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <br />
-              <Form.Dropdown
+              <div id="slider">
+                <Form.Input
+                  min={1}
+                  max={maxIndex}
+                  name="index"
+                  onChange={this.handleChange}
+                  step={1}
+                  type="range"
+                  value={index}
+                />
+              </div>
+              <div id="flex_container">
+                <div>
+                  <h3>Ground Truth</h3>
+                  <iframe title='title1' src={perf1} width='500px' height='500px' loading="lazy"></iframe>
+                </div>
+                <div>
+                  <h3>Pred Aug</h3>
+                  <iframe title='title2' src={perf2} width='500px' height='500px' loading="lazy"></iframe>
+                </div>
+              </div>
+            </Grid.Column>
+            <Form.Dropdown
                 label="Select a pig ultrasound reconstruction:"
                 name="pig"
                 onChange={this.handleChange}
                 options={options}
                 value={pig}
               />
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <h3>Pred Aug</h3>
-              <iframe title='title2' src={perf2} width='500px' height='500px' loading="lazy"></iframe>
-            </Grid.Column>
           </Grid>
         );
       }
@@ -205,8 +203,6 @@ export default class SliderDemo extends Component {
               type="range"
               value={index}
             />
-            <br />
-            <br />
             <br />
             <br />
             <br />

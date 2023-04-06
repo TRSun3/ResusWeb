@@ -10,8 +10,7 @@ export default class Navbar extends React.Component {
   ) => {
     this.setState({ activeItem: name });
   };
-
   render() {
-    return <Header as="h1">RESUS Demo</Header>;
+    return <div><Header as="h1" textAlign="center">3D Visualization Tool for Robot-Guided Needle Insertion</Header><br /><br /></div>;
   }
 }
