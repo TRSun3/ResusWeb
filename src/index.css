@@ -14,8 +14,10 @@ code {
 
 #flex_container{
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 40px;
 }
+
 
 #slider{
   width: 30%;
