@@ -182,6 +182,16 @@ export default class SliderDemo extends Component {
   };
 
   /*
+   * Reloads the iframe
+   */
+  reloadFrames = (iframeId) => {
+    let iframe = document.getElementById(iframeId);
+    if (iframe) {
+      iframe.contentWindow.location.reload();
+    }
+  }
+
+  /*
    * Resets the camera for a frame
    */
   resetCamera = (iframeId) => {
@@ -291,14 +301,8 @@ export default class SliderDemo extends Component {
                           <Button
                             primary
                             onClick={(event) => {
-                              // Reload the two frames
                               for (let i = 0; i < this.iframeIds.length; i++) {
-                                let iframe = document.getElementById(
-                                  this.iframeIds[i]
-                                );
-                                if (iframe) {
-                                  iframe.contentWindow.location.reload();
-                                }
+                                this.reloadFrames(this.iframeIds[i]);
                               }
                               this.foldPanels("true");
                             }}
@@ -312,32 +316,8 @@ export default class SliderDemo extends Component {
                           <Button
                             primary
                             onClick={(event) => {
-                              // Fake a click event on the "Reset camera" button in the K3D panel
                               for (let i = 0; i < this.iframeIds.length; i++) {
-                                let iframe = document.getElementById(
-                                  this.iframeIds[i]
-                                );
-                                if (!iframe) {
-                                  continue;
-                                }
-                                let resetButtons =
-                                  iframe.contentWindow.document.getElementsByClassName(
-                                    "name"
-                                  );
-                                for (
-                                  let b = 0;
-                                  b < resetButtons.length;
-                                  b++ // Buttons of the same class name
-                                )
-                                  if (
-                                    resetButtons[
-                                      b
-                                    ].textContent.toLowerCase() ===
-                                    "reset camera"
-                                  ) {
-                                    // Reset button
-                                    resetButtons[b].click();
-                                  }
+                                this.resetCamera(this.iframeIds[i]);
                               }
                               this.foldPanels("true");
                             }}
