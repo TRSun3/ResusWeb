@@ -1,3 +1,7 @@
+/**
+ * Visualization tool for RoboTRAC
+ */
+
 // Imports
 import React, { Component } from "react";
 import { Form, Grid, Menu, Image, Button, Checkbox } from "semantic-ui-react";
@@ -231,7 +235,7 @@ export default class SliderDemo extends Component {
   };
 
   /*
-   * Rendering
+   * Rendering the visualization tool
    */
   render() {
     const { pig, index } = this.state;
