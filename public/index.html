@@ -1,3 +1,8 @@
+<!--
+  RoboTRAC Visualization Tool
+
+  index.html
+    -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,35 +15,175 @@
       content="Web site created using create-react-app"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
     <title>Visualization Tool</title>
-    <script src="index.jsx"></script>
+    <script src="index.jsx" type="text/babel"></script>
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <script id="showTopArrowScript">
+      function addCanvasAndHiddenInput() {
+        var canvas, showTopArrow;
+        var body = document.getElementsByTagName("body")[0];
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+        if (!document.getElementById("myCanvas")) {
+          // Create a new canvas if it does not exist
+          // Put new canvas on top of the existing one
+          canvas = document.createElement("canvas");
+          canvas.id = "myCanvas";
+          canvas.style.position = "absolute";
+          canvas.style.left = 0;
+          canvas.style.top = 0;
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+          canvas.style.zIndex = 1000;
+          canvas.style.border = "1px solid";
+          canvas.addEventListener("pointercancel", (event) => {
+            renderArrow(event, 1);
+          });
+          canvas.addEventListener("pointerdown", (event) => {
+            renderArrow(event, 2);
+          });
+          canvas.addEventListener("pointermove", (event) => {
+            renderArrow(event, 3);
+          });
+          canvas.addEventListener("pointerup", (event) => {
+            renderArrow(event, 4);
+          });
+          canvas.addEventListener("wheel", (event) => {
+            renderArrow(event, 5);
+          });
+          body.appendChild(canvas);
+        }
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+        if (!document.getElementById("showTopArrow")) {
+          // Create top arrow if it does not exist
+          // Create hidden input to control the display of top arrow, turned on/off on parent page
+          chkboxShowTopArrow = document.createElement("input");
+          chkboxShowTopArrow.type = "hidden";
+          chkboxShowTopArrow.id = "showTopArrow";
+          chkboxShowTopArrow.name = "showTopArrow";
+          chkboxShowTopArrow.value = "false";
+          body.appendChild(chkboxShowTopArrow);
+        }
+      }
+
+      // Get (x, y) from div element
+      function getCoordinatesFromDiv(divItem) {
+        let styleStr = divItem.getAttribute("style");
+        let start = styleStr.indexOf("calc") + 5;
+        let end = styleStr.indexOf("px", start);
+        let x = Number(styleStr.substring(start, end));
+        start = styleStr.indexOf("calc", end) + 5;
+        end = styleStr.indexOf("px", start);
+        let y = Number(styleStr.substring(start, end));
+        return [x, y];
+      }
+
+      // Event handler
+      function renderArrow(event, eventType) {
+        // Clone and dispatch events the original canvas
+        let canvases = document.getElementsByTagName("canvas");
+        if (!canvases) {
+          return;
+        }
+        for (let j = 0; j < canvases.length; j++) {
+          if (canvases[j].id !== "myCanvas") {
+            let new_event = new event.constructor(event.type, event);
+            canvases[j].dispatchEvent(new_event);
+          }
+        }
+
+        // Get current setting from the hidden input, which is set by parent page at the checkbox
+        let showTopArrow = document
+          .getElementById("showTopArrow")
+          .getAttribute("value");
+
+        let canvasDiv = document.getElementById("canvasTarget");
+        if (!canvasDiv) {
+          return;
+        }
+        let divElements = canvasDiv.getElementsByTagName("div").item(0);
+        if (!divElements) {
+          return;
+        }
+        let divCollection = divElements.getElementsByTagName("div");
+        if (!divCollection) {
+          return;
+        }
+
+        // In this div collection, the first 3 are x/y/z icons at the bottom right corner
+        // Only need y at this moment for arrow
+        let coordinates = getCoordinatesFromDiv(divCollection.item(0));
+        let X_x = coordinates[0];
+        let X_y = coordinates[1];
+        coordinates = getCoordinatesFromDiv(divCollection.item(1));
+        let Y_x = coordinates[0];
+        let Y_y = coordinates[1];
+        coordinates = getCoordinatesFromDiv(divCollection.item(2));
+        let Z_x = coordinates[0];
+        let Z_y = coordinates[1];
+
+        // Arrow properties
+        // Dimensions hard-coded for canvas size 500
+        let origin_x = 446;
+        let origin_y = 446;
+        let delta = 15; // Arrow Size
+        let times = 2; // Original arrow length multiple
+
+        const canvas = document.getElementById("myCanvas");
+        if (!canvas) {
+          return;
+        }
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (showTopArrow === "false") {
+          return;
+        }
+        ctx.beginPath();
+
+        // Offsets (w / 2, h / 2): always display origin at the centre
+
+        // Horizontal plane, draw and fill
+        ctx.moveTo(canvas.width / 2 - delta, canvas.height / 2);
+        ctx.lineTo(
+          (Y_x - origin_x) * times + canvas.width / 2,
+          (Y_y - origin_y) * times + canvas.height / 2
+        );
+        ctx.lineTo(canvas.width / 2 + delta, canvas.height / 2);
+        ctx.lineTo(canvas.width / 2 - delta, canvas.height / 2);
+        ctx.strokeStyle = "darkgrey";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = "grey";
+        ctx.fill();
+
+        // Vertical planes, draw and fill
+        ctx.moveTo(canvas.width / 2, canvas.height / 2 - delta);
+        ctx.lineTo(
+          (Y_x - origin_x) * 2 + canvas.width / 2,
+          (Y_y - origin_y) * 2 + canvas.height / 2
+        );
+        ctx.lineTo(canvas.width / 2, canvas.height / 2 + delta);
+        ctx.lineTo(canvas.width / 2, canvas.height / 2 - delta);
+        ctx.strokeStyle = "darkgrey";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.fillStyle = "grey";
+        ctx.fill();
+
+        // Central line, draw
+        ctx.moveTo(canvas.width / 2, canvas.height / 2);
+        ctx.lineTo(
+          (Y_x - origin_x) * 2 + canvas.width / 2,
+          (Y_y - origin_y) * 2 + canvas.height / 2
+        );
+        ctx.strokeStyle = "darkgrey";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    </script>
   </body>
 </html>

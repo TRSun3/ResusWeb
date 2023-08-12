@@ -1,5 +1,7 @@
 /**
- * Visualization tool for RoboTRAC
+ * RoboTRAC Visualization Tool
+ *
+ * SliderDemo.js
  */
 
 // Imports
@@ -8,6 +10,9 @@ import { Form, Grid, Menu, Image, Button, Checkbox } from "semantic-ui-react";
 import { open } from "rosbag";
 import Plot from "react-plotly.js";
 import ReactDOM from "react-dom/client";
+import BackgroundColor from "./BackgroundColor";
+import { ChkShowTopArrow, injectShowTopArrowScript } from "./ChkShowTopArrow";
+import AccordionMenu from "./AccordionMenu";
 
 // List of PIG files
 const pigs = [
@@ -37,22 +42,26 @@ const options = pigs.map((p) => ({
 export default class SliderDemo extends Component {
   state = { pig: pigs[0], index: 1 };
   iframeIds = ["title1", "title2"];
+
+  componentDidMount() {
+    for (let i = 0; i < this.iframeIds.length; i++)
+      document
+        .getElementById(this.iframeIds[i])
+        .addEventListener("load", injectShowTopArrowScript);
+  }
   handleChange = (_e, { name, value }) => this.setState({ [name]: value });
 
   async draw(file) {
-    // console.log("function called");
     const bag = await open(file);
     var best_marker_points = new Array(Number);
     var most_points = -1;
     var best_color = new Array(Number);
-    // var best_angle = new Array(Number);
     await bag.readMessages(
       { topics: ["/ultrasound_reconstruction"] },
       (result) => {
         var points = [];
         var colors = [];
         var angles = [];
-        // console.log(result.message);
         for (var i = 0; i < result.message.markers.length; i++) {
           var color = Math.random();
           for (var j = 0; j < result.message.markers[i].points.length; j++) {
@@ -64,14 +73,11 @@ export default class SliderDemo extends Component {
             best_marker_points = points;
             most_points = points.length;
             best_color = colors;
-            // best_angle = angles;
           }
         }
       }
     );
 
-    // console.log(best_marker_points.length);
-    // console.log(best_marker_points.length % 3);
     var x = [];
     var y = [];
     var z = [];
@@ -94,9 +100,6 @@ export default class SliderDemo extends Component {
       }
     }
 
-    // var data = {x : x, y : y, z : z, i : a, j : b, k : c,
-    // alphahull: 5, opacity: 1, intensity: best_color, color: 'cyan', type: 'mesh3d'};
-    // @ts-ignore
     var graph = (
       <Plot
         data={[
@@ -112,8 +115,6 @@ export default class SliderDemo extends Component {
             k: c,
             intensity: best_color,
             color: "cyan",
-            // text: best_angle,
-            // hovertemplate: "Kinematics Angle: %{text}"
           },
         ]}
         layout={{ width: 500, height: 500, title: "Model" }}
@@ -189,7 +190,7 @@ export default class SliderDemo extends Component {
     if (iframe) {
       iframe.contentWindow.location.reload();
     }
-  }
+  };
 
   /*
    * Resets the camera for a frame
@@ -235,11 +236,13 @@ export default class SliderDemo extends Component {
         continue;
       }
       for (let c = 0; c < canvas.length; c++) {
-        let newEvent = new event.nativeEvent.constructor(
-          event.nativeEvent.type,
-          event.nativeEvent
-        );
-        canvas[c].dispatchEvent(newEvent);
+        if (canvas[c].id === "myCanvas") {
+          let newEvent = new event.nativeEvent.constructor(
+            event.nativeEvent.type,
+            event.nativeEvent
+          );
+          canvas[c].dispatchEvent(newEvent);
+        }
       }
     }
   };
@@ -314,6 +317,7 @@ export default class SliderDemo extends Component {
                       <Menu.Item>
                         <div className="flex_child">
                           <Button
+                            id="btnResetCamera"
                             primary
                             onClick={(event) => {
                               for (let i = 0; i < this.iframeIds.length; i++) {
@@ -355,18 +359,29 @@ export default class SliderDemo extends Component {
                                 // Remove tempStyle
                                 let sheetToBeRemoved =
                                   document.getElementById("tempStyle");
-                                if (sheetToBeRemoved) {
+                                while (sheetToBeRemoved) {
                                   let sheetParent = sheetToBeRemoved.parentNode;
                                   if (sheetParent) {
                                     sheetParent.removeChild(sheetToBeRemoved);
                                   }
+                                  sheetToBeRemoved =
+                                    document.getElementById("tempStyle");
                                 }
                               }
                             }}
                           />
                         </div>
                       </Menu.Item>
+                      <Menu.Item>
+                        <BackgroundColor />
+                      </Menu.Item>
+                      <Menu.Item>
+                        <ChkShowTopArrow />
+                      </Menu.Item>
                     </Menu>
+                    <Menu.Item style={{ textAlign: "left" }}>
+                      <AccordionMenu />
+                    </Menu.Item>
                   </div>
                 </Grid.Column>
                 <Grid.Column>
@@ -444,8 +459,8 @@ export default class SliderDemo extends Component {
           <Grid.Column textAlign="center">
             <h3>Pred Aug</h3>
             <iframe
-              id="title2"
-              title="title2"
+              id="title3"
+              title="title3"
               src={perf3}
               width="500px"
               height="500px"
