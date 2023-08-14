@@ -53,7 +53,7 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
     class DragControls extends EventDispatcher {
         constructor( _objects, _camera, _domElement ) {
             super();
-            _domElement.style.touchAction = 'none'; // disable touch scroll
+            _domElement.style.touchAction = 'none'; // Disable touch scroll
             let _selected = null, _hovered = null;
             const _intersections = [];
             const scope = this;
@@ -98,7 +98,7 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
                     return;
                 }
     
-                // hover support
+                // Hover support
                 if ( event.pointerType === 'mouse' || event.pointerType === 'pen' ) {
                     _intersections.length = 0;
                     _raycaster.setFromCamera( _pointer, _camera );
@@ -181,7 +181,7 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
   let part2 = `
     const addNewLineMesh = (shape, x1, y1, z1, x2, y2, z2, color) => { 
         if (shape === 'Line') {
-            //when drawing a line, it is from (x1,y1,z1) to (x2,y2,z2)
+            // When drawing a line, it is from (x1, y1, z1) to (x2, y2, z2)
             const material = new THREE.LineBasicMaterial( { color: color } ); 
             const points = [];
             points.push( new THREE.Vector3(x1, y1, z1) );
@@ -190,8 +190,8 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
             const line = new THREE.Line( geometry, material );
             K3DInstance.getScene().add(line);
         } else if (shape === 'Sphere') {
-            //when drawing a sphere, it is at (x1, y1, z1)
-            //x2 is the radius, y2 is the segments (0-32), z2 is the opacity (0-100)
+            // When drawing a sphere, it is at (x1, y1, z1)
+            // x2 is the radius, y2 is the segments (0-32), z2 is the opacity (0-100)
             const geometry1 = new THREE.SphereGeometry( x2, y2*2, y2 );
             const material1 = new THREE.MeshStandardMaterial( { color: color } ); 
             material1.transparent = true;
@@ -200,13 +200,13 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
             sphere.position.set( x1, y1, z1 )
             K3DInstance.getScene().add(sphere); 
         } else if (shape === 'Plane') {
-            //when drawing a plane, it is from (x1,y1) to (x2,y2) at z1, z2 is the opacity (0-100)
+            // When drawing a plane, it is from (x1, y1) to (x2, y2) at z1, z2 is the opacity (0-100)
             const geometry2 = new THREE.PlaneGeometry(Number(x2)-Number(x1), Number(y2)-Number(y1));
             const material2 = new THREE.MeshStandardMaterial( {color: color , side: THREE.DoubleSide} );
             material2.transparent = true;
             material2.opacity = Number(z2/100);
             const plane = new THREE.Mesh( geometry2, material2 );
-            //plane placed based on its center point
+            // Plane placed based on its center point
             plane.position.set(
                 Math.floor((Number(x2)+Number(x1)) / 2), 
                 Math.floor((Number(y2)+Number(y1)) / 2), 
@@ -225,7 +225,7 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
         let body = document.getElementsByTagName("body")[0];
         let hiddenDrawShapeParams = document.createElement("button");
         hiddenDrawShapeParams.type = "button";
-        hiddenDrawShapeParams.display="none"; //hidden
+        hiddenDrawShapeParams.display="none"; // Hidden
         hiddenDrawShapeParams.id = "hiddenDrawShapeParams";
         hiddenDrawShapeParams.name = "hiddenDrawShapeParams";
         hiddenDrawShapeParams.value = "` +
@@ -246,10 +246,10 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
     color +
     `";
         hiddenDrawShapeParams.onclick = function(){
-            //param at 0 is the shape like 'Line', 'Sphere', 'Plane', param at 7 is the color or 'clear'
+            // Param at 0 is the shape like 'Line', 'Sphere', 'Plane', param at 7 is the color or 'clear'
             const params = document.getElementById("hiddenDrawShapeParams").value.split(",");
             if (K3DInstance.getScene().children.length > 3) {
-                //remove new object, geometry.type: BufferGeometry for line, SphereGeometry for sphere, PlaneGeometry for plane
+                // Remove new object, geometry.type: BufferGeometry for line, SphereGeometry for sphere, PlaneGeometry for plane
                 for (let i = K3DInstance.getScene().children.length - 1; i >= 3; i--) {
                     let obj = K3DInstance.getScene().children[i];
                     if ((params[0] === 'Line' && obj.geometry.type === 'BufferGeometry') 
@@ -260,13 +260,14 @@ function getDrawShapeScript(shape, x1, y1, z1, x2, y2, z2, color) {
             }
             if (!params[7].includes('clear')) { 
                 addNewLineMesh(params[0], params[1],params[2],params[3],params[4],params[5],params[6],params[7]);
-                //enable drag & drop
+                // Enable drag & drop
                 let DragControlsInstance;
                 const _objects = []; 
                 if (K3DInstance.getScene().children.length > 3) {
-                    //add all new objects
-                    for (let i = 3; i < K3DInstance.getScene().children.length; i++)
+                    // Add all new objects
+                    for (let i = 3; i < K3DInstance.getScene().children.length; i++) {
                         _objects.push(K3DInstance.getScene().children[i]);
+                    }
                     const _camera = K3DInstance.getWorld().camera;
                     const _domElement = document.getElementById('canvasTarget');
                     DragControlsInstance = new DragControls(_objects, _camera, _domElement);
@@ -374,7 +375,7 @@ function getMaxCurrentFrameNumbers() {
       inputs[i].max &&
       inputs[i].value
     ) {
-      return [inputs[i].max, inputs[i].value];
+      return [inputs[i].max, inputs[i].max - inputs[i].value];
     }
   return ["-1", "-1"]; // Slider not loaded yet
 }
